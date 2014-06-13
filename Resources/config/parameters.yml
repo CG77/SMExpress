@@ -1,0 +1,3 @@
+parameters:
+    #URL API SM-Express
+    api_smexpress: http://sme.seine-et-marne.fr

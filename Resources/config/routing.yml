@@ -1,0 +1,4 @@
+sm_express:
+    resource: "@SMExpressBundle/Controller/"
+    type:     annotation
+    prefix:   /

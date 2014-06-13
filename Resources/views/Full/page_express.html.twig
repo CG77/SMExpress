@@ -1,0 +1,339 @@
+{% extends "CGFrontBundle:Layout:home.html.twig" %}
+{% set body_class = "bodyPage bodyForm bodySMExpress" %}
+{% set body_id = "sm-express" %}
+
+{% block stylesheets_more %}
+    {{ parent() }}
+    {% stylesheets 'bundles/smexpress/stylesheets/style_smexpress.css' filter='cssrewrite' %}
+    <link rel="stylesheet" type="text/css" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts_more %}
+    {{ parent() }}
+    {% javascripts '@SMExpressBundle/Resources/public/javascripts/sme_api/search_express.js' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block content %}
+    {% block lowerSection %}
+        <section class="lowerSection">
+        <div id="utils">
+            <div class="wrapper">
+                {{ render( controller('CGFrontBundle:Layout:breadcrumb',{
+                'locationId': location.id, })
+                ) }}
+                {% include "CGFrontBundle:Common:social_tools.html.twig" %}
+            </div>
+        </div>
+        <div class="wrapper">
+        <!-- colMedium -->
+        <section class="colMedium">
+        {% include "CGFrontBundle:Common:tooltip.html.twig" %}
+        <article class="paneContent">
+            <header class="paneHeader">
+                <h1> {{ ez_render_field(content, 'title') }}</h1>
+            </header>
+        </article>
+        <section class="box tabsUnit formUnit expressFormUnit">
+        <!-- tabNav -->
+        <ul id="myTab" class="tabNav">
+            <li class="active">
+                <a href="#timetableSearch" data-toggle="tab">{{ ez_render_field(content, 'onglet1') }}</a>
+            </li>
+            <li>
+                <a href="#journeySearch" data-toggle="tab">{{ ez_render_field(content, 'onglet2') }}</a>
+            </li>
+        </ul>
+        <!-- /tabNav -->
+
+        <!-- tabContent -->
+        <div class="content tabContent">
+        <!-- tabPanel --><!-- Bloc Consulter les horaires -->
+        <div class="tabPanel fade in active" id="timetableSearch">
+            <form id="smeTimeSearchForm" action="#" method="post">
+                <p class="unseen">Consulter les horaires</p>
+                <div class="field">
+                    <select id="lines" name="lines">
+                    </select>
+                </div>
+                <div class="field routes" style="display: none">
+                    <select id="routes" name="routes">
+                    </select>
+                </div>
+                <div class="field timetables" style="display: none">
+                    <select id="timetables" name="timetables">
+                    </select>
+                </div>
+                <div class="field" id="timetableTime" style="display: none">
+                    <div class="oneLine toDay">
+                        <label for="timetableTimeHours">Afficher les horaires après&nbsp;:</label>
+                    </div>
+                    <div class="oneLine duration">
+                        <label for="timetableTimeHours" title="heure(s)">h</label>
+                        <select name="timetableTimeHours" id="timetableTimeHours">
+                            <option value="00">00</option>
+                            <option value="01">01</option>
+                            <option value="02">02</option>
+                            <option value="03">03</option>
+                            <option value="04">04</option>
+                            <option value="05">05</option>
+                            <option value="06">06</option>
+                            <option value="07">07</option>
+                            <option value="08">08</option>
+                            <option value="09">09</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                            <option value="20">20</option>
+                            <option value="21">21</option>
+                            <option value="22">22</option>
+                            <option value="23">23</option>
+                        </select>
+                        <label for="timetableTimeHoursMins" title="minute(s)">mn</label>
+                        <select name="timetableTimeHoursMins" id="timetableTimeHoursMins">
+                            <option value="00">00</option>
+                            <option value="01">01</option>
+                            <option value="02">02</option>
+                            <option value="03">03</option>
+                            <option value="04">04</option>
+                            <option value="05">05</option>
+                            <option value="06">06</option>
+                            <option value="07">07</option>
+                            <option value="08">08</option>
+                            <option value="09">09</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                            <option value="20">20</option>
+                            <option value="21">21</option>
+                            <option value="22">22</option>
+                            <option value="23">23</option>
+                            <option value="24">24</option>
+                            <option value="25">25</option>
+                            <option value="26">26</option>
+                            <option value="27">27</option>
+                            <option value="28">28</option>
+                            <option value="29">29</option>
+                            <option value="30">30</option>
+                            <option value="31">31</option>
+                            <option value="32">32</option>
+                            <option value="33">33</option>
+                            <option value="34">34</option>
+                            <option value="35">35</option>
+                            <option value="36">36</option>
+                            <option value="37">37</option>
+                            <option value="38">38</option>
+                            <option value="39">39</option>
+                            <option value="40">40</option>
+                            <option value="41">41</option>
+                            <option value="42">42</option>
+                            <option value="43">43</option>
+                            <option value="44">44</option>
+                            <option value="45">45</option>
+                            <option value="46">46</option>
+                            <option value="47">47</option>
+                            <option value="48">48</option>
+                            <option value="49">49</option>
+                            <option value="50">50</option>
+                            <option value="51">51</option>
+                            <option value="52">52</option>
+                            <option value="53">53</option>
+                            <option value="54">54</option>
+                            <option value="55">55</option>
+                            <option value="56">56</option>
+                            <option value="57">57</option>
+                            <option value="58">58</option>
+                            <option value="59">59</option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+            <!-- Results -->
+            <div class="tableResults">
+                <div class="rwdTable stationsUnit">
+                    <table class="stations">
+                    </table>
+                </div>
+                <div class="rwdTable journeysUnit">
+                    <table class="journeys">
+                    </table>
+                </div>
+                <ol class="resetList exceptions">
+                </ol>
+                <p class="validityDate">
+                </p>
+            </div>
+            <!-- Results -->
+            <a href="" id="downloadTimeTablePDFTime" class="readMore" target="_blank" style="display: none;">Télécharger
+                la fiche (PDF)</a>
+        </div>
+        <!-- /tabPanel --><!-- /Bloc Consulter les horaires -->
+
+        <!-- tabPanel --><!-- Bloc Trouver un trajet -->
+        <div class="tabPanel fade" id="journeySearch">
+            <form id="smeJourneySearchForm" action="#" method="post">
+                <div class="field fromStation" id="smeFromStation">
+                    <label for="fromStationSelect">Départ</label>
+                    <select id="fromStationSelect" name="fromStationSelect">
+                        <option value="">Station de départ</option>
+                    </select>
+                </div>
+                <div class="field toStation" id="smeToStation">
+                    <label for="toStationSelect">Arrivée</label>
+                    <select id="toStationSelect" name="toStationSelect">
+                        <option value="">Station d'arrivée</option>
+                    </select>
+                </div>
+                <button id="showReverse" class="btnReverse" type="button">Inverser</button>
+                <div class="field" id="smeDepartureTime">
+                    <div class="oneLine toDay">
+                        <label for="smeDepartureDay" title="Jour">Le </label>
+                        <input type="date" id="smeDepartureDay" name="smeDepartureDay" class="datepicker" value=""/>
+                    </div>
+                    <div class="oneLine duration">
+                        <span class="fieldTitle">à</span>
+                        <label for="smeDepartureHours" title="heure(s)">h</label>
+                        <select name="smeDepartureHours" id="smeDepartureHours">
+                            <option value="00">00</option>
+                            <option value="01">01</option>
+                            <option value="02">02</option>
+                            <option value="03">03</option>
+                            <option value="04">04</option>
+                            <option value="05">05</option>
+                            <option value="06">06</option>
+                            <option value="07">07</option>
+                            <option value="08">08</option>
+                            <option value="09">09</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                            <option value="20">20</option>
+                            <option value="21">21</option>
+                            <option value="22">22</option>
+                            <option value="23">23</option>
+                        </select>
+                        <label for="smeDepartureMins" title="minute(s)">mn</label>
+                        <select name="smeDepartureMins" id="smeDepartureMins">
+                            <option value="00">00</option>
+                            <option value="01">01</option>
+                            <option value="02">02</option>
+                            <option value="03">03</option>
+                            <option value="04">04</option>
+                            <option value="05">05</option>
+                            <option value="06">06</option>
+                            <option value="07">07</option>
+                            <option value="08">08</option>
+                            <option value="09">09</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                            <option value="20">20</option>
+                            <option value="21">21</option>
+                            <option value="22">22</option>
+                            <option value="23">23</option>
+                            <option value="24">24</option>
+                            <option value="25">25</option>
+                            <option value="26">26</option>
+                            <option value="27">27</option>
+                            <option value="28">28</option>
+                            <option value="29">29</option>
+                            <option value="30">30</option>
+                            <option value="31">31</option>
+                            <option value="32">32</option>
+                            <option value="33">33</option>
+                            <option value="34">34</option>
+                            <option value="35">35</option>
+                            <option value="36">36</option>
+                            <option value="37">37</option>
+                            <option value="38">38</option>
+                            <option value="39">39</option>
+                            <option value="40">40</option>
+                            <option value="41">41</option>
+                            <option value="42">42</option>
+                            <option value="43">43</option>
+                            <option value="44">44</option>
+                            <option value="45">45</option>
+                            <option value="46">46</option>
+                            <option value="47">47</option>
+                            <option value="48">48</option>
+                            <option value="49">49</option>
+                            <option value="50">50</option>
+                            <option value="51">51</option>
+                            <option value="52">52</option>
+                            <option value="53">53</option>
+                            <option value="54">54</option>
+                            <option value="55">55</option>
+                            <option value="56">56</option>
+                            <option value="57">57</option>
+                            <option value="58">58</option>
+                            <option value="59">59</option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+            <!-- Results -->
+            <input type="hidden" value="0" id="nbPage">
+            <div class="tableResults">
+                <div class="rwdTable journeysUnit listing">
+                    <table class="journeys item">
+                    </table>
+                </div>
+                <div class="more" style="">
+                    <a href="#dev">Voir plus de résultats</a>
+                </div>
+                <div class="info">(afficher les <span class="hours">3</span> prochaines heures)</div>
+                <a id="downloadTimeTablePDFJourney" href="#dev" class="readMore" target="_blank" style="display: none;">Télécharger
+                    la fiche (PDF)</a>
+            </div>
+            <!-- Results -->
+        </div>
+        <!-- /tabPanel --><!-- /Bloc Trouver un trajet -->
+        </div>
+        <!-- /tabContent -->
+        </section>
+        </section>
+        <input id="urlAPI" type="hidden" value="{{ urlAPI }}" />
+        <!-- /colMedium -->
+        {% block right_column %}
+            <!-- aside -->
+            <aside role="complementary">
+                {% if not ez_is_field_empty(content,'right_column') %}
+                    {{ ez_render_field( content, 'right_column', {'LocationId':location.id} ) }}
+                {% endif %}
+            </aside>
+            <!-- /aside -->
+        {% endblock %}
+        </div>
+        </section>
+    {% endblock %}
+{% endblock %}

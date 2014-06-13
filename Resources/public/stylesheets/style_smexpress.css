@@ -1,0 +1,42 @@
+/*************Button "voir plus de resultat" page S-M-Express ***************/
+
+
+.more, .info{
+    margin-bottom: -1.333em;
+    text-align: center;
+}
+.tabPanel .more ,
+.tabPanel .info {
+    margin-bottom: 0;
+    margin-top: 1.333em;
+}
+
+
+.more a {
+    display: inline-block;
+    padding: 6px 27px;
+    background: #00CCFF;
+    font: 1.333em/1 "DinCond-Bold", Arial, Helvetica, sans-serif;
+    color: #FFF;
+    position: relative;
+}
+
+.more a:before,
+.more a:after {
+    background: url(../../bundles/cgfront/images/global-pic-sp.svg) no-repeat -1510px -8px;
+    content: " ";
+    display: block;
+    width: 8px;
+    height: 11px;
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    margin-top: -4px;
+}
+.more a:after {
+    left: auto;
+    right: 10px;
+}
+
+
+/*******************end Button****************************/

@@ -1,0 +1,9 @@
+system:
+    cg77_front:
+        location_view:
+            full:
+                page_express:
+                    controller: "SMExpressBundle:SMExpress:viewLocation"
+                    match:
+                        Identifier\ContentType: [page_express]
+                        Identifier\Section: [standard]
