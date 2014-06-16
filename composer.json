@@ -1,0 +1,27 @@
+{
+    "name": "SMExpress/Bundle",
+    "description": "Seine et Marne Express Bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "SMExpress",
+            "homepage": "http://seine-et-marne.fr/"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url":  "https://github.com/CG77/SMExpress.git"
+        }
+    ],    
+    "require": {
+        "ezsystems/ezpublish-kernel": "*",
+        "sensio/framework-extra-bundle": "2.3.*",
+        "novactive/novaextrabundle": "1.2"
+    },
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-0": {"SMExpress\\Bundle": ""}
+    },
+    "target-dir": "SMExpress/Bundle"
+}
