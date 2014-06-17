@@ -1,6 +1,6 @@
 {
     "name": "SMExpress/Bundle",
-    "description": "Seine et Marne Express Bundle",
+    "description": "Service d'information horaires de bus en Seine et Marne",
     "license": "MIT",
     "authors": [
         {
