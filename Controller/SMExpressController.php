@@ -18,6 +18,7 @@ class SMExpressController extends BaseController{
         $content = $contentService->loadContentByContentInfo($location->getContentInfo());
 
         $urlAPI = $this->get( 'service_container' )->getParameter( "api_smexpress" );
+        $pageLayout = $this->get( 'service_container' )->getParameter( "page_layout" );
 
         return $this->render(
             'SMExpressBundle:Full:page_express.html.twig',
@@ -25,7 +26,8 @@ class SMExpressController extends BaseController{
 
                 'location' => $location,
                 'content' =>$content,
-                'urlAPI' =>$urlAPI
+                'urlAPI' =>$urlAPI,
+                'pageLayout' =>$pageLayout
 
             ));
 
