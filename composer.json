@@ -1,5 +1,5 @@
 {
-    "name": "SMExpress/Bundle",
+    "name": "smexpress/smexpressbundle",
     "description": "Seine et Marne Express Bundle",
     "license": "MIT",
     "authors": [
@@ -27,7 +27,7 @@
     "target-dir": "SMExpress/Bundle",
     "extra" : {
         "branch-alias" : {
-            "dev-master" : "dev-v1.0"
+            "dev-master" : "v1.2"
         }
     }
 }
