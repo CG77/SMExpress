@@ -27,7 +27,7 @@
     "target-dir": "SMExpress/Bundle",
     "extra" : {
         "branch-alias" : {
-            "dev-master" : "v1.2"
+            "dev-master" : "v1.3"
         }
     }
 }
