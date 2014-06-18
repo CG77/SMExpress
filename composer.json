@@ -1,6 +1,6 @@
 {
-    "name": "smexpress/smexpressbundle",
-    "description": "Service d'information horaires de bus en Seine et Marne",
+    "name": "SMExpress/Bundle",
+    "description": "Seine et Marne Express Bundle",
     "license": "MIT",
     "authors": [
         {
@@ -13,15 +13,21 @@
             "type": "vcs",
             "url":  "https://github.com/CG77/SMExpress.git"
         }
-    ],    
+    ],
     "require": {
         "ezsystems/ezpublish-kernel": "*",
         "sensio/framework-extra-bundle": "2.3.*",
-        "novactive/novaextrabundle": "1.2"
+        "novactive/novaextrabundle": "1.2",
+        "novactive/eznovaextrabundle": "*"
     },
     "minimum-stability": "dev",
     "autoload": {
         "psr-0": {"SMExpress\\Bundle": ""}
     },
-    "target-dir": "SMExpress/Bundle"
+    "target-dir": "SMExpress/Bundle",
+    "extra" : {
+        "branch-alias" : {
+            "dev-master" : "dev-v1.0"
+        }
+    }
 }
