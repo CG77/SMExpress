@@ -23,7 +23,7 @@
 
 .more a:before,
 .more a:after {
-    background: url(../../bundles/cgfront/images/global-pic-sp.svg) no-repeat -1510px -8px;
+    background: url(/bundles/cgfront/images/global-pic-sp.svg) no-repeat -1510px -8px;
     content: " ";
     display: block;
     width: 8px;

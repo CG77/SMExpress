@@ -25,7 +25,7 @@ $(document).ready(function () {
 
 
     $.ajax({
-        url: URLAPI+'/API/lines',
+        url: URLAPI + '/API/lines',
         dataType: "json",
         success: function (data) {
             $("#uniform-lines span").append('Lignes');
@@ -62,7 +62,7 @@ $(document).ready(function () {
         $('#timetableSearch .tableResults').hide();
         if (id) {
             $.ajax({
-                url: URLAPI+'/API/lines/' + id,
+                url: URLAPI + '/API/lines/' + id,
                 dataType: "json",
                 //async: true,
                 success: function (data) {
@@ -99,7 +99,7 @@ $(document).ready(function () {
         $('#timetableSearch .tableResults').hide();
         if (id) {
             $.ajax({
-                url: URLAPI+'/API/routes/' + id,
+                url: URLAPI + '/API/routes/' + id,
                 dataType: "json",
                 //async: false,
                 success: function (data) {
@@ -128,7 +128,7 @@ $(document).ready(function () {
 
 
     function pdfUrl(lineId) {
-        var service = URLAPI+'/lines/LINE_ID.pdf';
+        var service = URLAPI + '/lines/LINE_ID.pdf';
         return service.replace("LINE_ID", lineId);
     }
 
@@ -139,7 +139,7 @@ $(document).ready(function () {
         $('#timetableSearch .tableResults').hide();
         if (id) {
             $.ajax({
-                url: URLAPI+'/API/timetables/' + id,
+                url: URLAPI + '/API/timetables/' + id,
                 dataType: "json",
                 async: false,
                 success: function (data) {
@@ -382,40 +382,67 @@ $(document).ready(function () {
 
     var WINDOW_HOURS = 2;
 
-    var fromStationNode = $('#smeFromStation');
-    var toStationNode = $('#smeToStation');
+    var fromStationNode = $("#fromStationSelectHidden");
+    var toStationNode = $("#toStationSelectHidden");
     var atDateNode = $('#smeDepartureTime');
     var resultsNode = $('#journeySearch .tableResults');
-    var initAutocomplete = function (container) {
-        $('input.selector', container).remove();
-        $('input.selector', container).show();
-    }
+
 
     var loadStations = function (container, stationFromId, onSuccess) {
-        $.getJSON(URLAPI+'/API/stations' + (!stationFromId ? '' : '/from/' + stationFromId), function (data) {
-            var select = $('select', container);
+        $("#smeToStation").hide();
+        $.getJSON(URLAPI + '/API/stations' + (!stationFromId ? '' : '/from/' + stationFromId), function (data) {
 
-            if (container == fromStationNode) {
-                $('option[value]', select).remove();
-                select.append('<option value="">Station de départ</option>');
-                $("#uniform-fromStationSelect span").empty();
-                $("#uniform-fromStationSelect span").append('Station de départ');
-            } else if (container == toStationNode) {
-                $('option[value]', select).remove();
-                select.append('<option value="">Station d\'arrivée</option>');
-                $("#uniform-toStationSelect span").empty();
-                $("#uniform-toStationSelect span").append('Station d\'arrivée');
+            var aStation = $.map(data, function (item) {
+                return {
+                    label: item.town+' - '+item.name,
+                    value: item.town+' - '+item.name,
+                    id: item.id
+                };
+            })
+            //console.log(result);
+            $("#fromStationSelect").autocomplete({
+                source: aStation,
+                select: function (event, ui) {
+                    //alert(ui.item.id);
+
+                    toStationNode.show();
+                    $.getJSON(URLAPI + '/API/stations/from/' + ui.item.id, function (data) {
+                        var aFrom = $.map(data, function (item) {
+                            return {
+                                label: item.town+' - '+item.name,
+                                value: item.town+' - '+item.name,
+                                id: item.id
+                            };
+                        })
+                        $("#fromStationSelectHidden").val(ui.item.id);
+                        $("#smeToStation").show();
+                        $("#toStationSelect").autocomplete({
+                            source: aFrom,
+                            select: function (event, ui) {
+
+                                $("#toStationSelectHidden").val(ui.item.id);
+
+                                getJourneys(
+                                    fromStationNode.val(),
+                                    toStationNode.val(),
+                                    $('input[name=smeDepartureDay]', atDateNode).val(),
+                                    $('select[name=smeDepartureHours]', atDateNode).val(),
+                                    $('select[name=smeDepartureMins]', atDateNode).val());
 
 
-            }
-            for (var d in data) {
-                var station = data[d];
-                select.append('<option value="' + station.id + '">' + (station.town || '') + ' - ' + station.name + '</option>');
-            }
-            initAutocomplete(container);
+                            }
+
+                        });
+
+                    });
+
+                }
+            });
+
             if (onSuccess) onSuccess();
         });
     }
+
 
     var infoShow = function (journey, td) {
         var popin = $('#infoPopin');
@@ -458,14 +485,14 @@ $(document).ready(function () {
     };
 
     function pdfUrl(lineId) {
-        var service = URLAPI+'/lines/LINE_ID.pdf';
+        var service = URLAPI + '/lines/LINE_ID.pdf';
         return service.replace("LINE_ID", lineId);
     }
 
     var getJourneys = function (stationFromId, stationToId, date, hours, minutes) {
         $.ajax({
             dataType: 'json',
-            url: URLAPI+'/API/journeys/' + stationFromId + '/' + stationToId,
+            url: URLAPI + '/API/journeys/' + stationFromId + '/' + stationToId,
             async: false,
             type: 'GET',
             data: { date: date, hours: hours, minutes: minutes, windowMinutes: 60 * WINDOW_HOURS },
@@ -535,11 +562,16 @@ $(document).ready(function () {
     var step = function (lvl) {
         var steps = [fromStationNode, toStationNode, atDateNode, resultsNode];
         var tab = steps.slice(lvl);
-        for (var s in tab)
+        for (var s in tab) {
             tab[s].hide();
+            //console.log(tab[s]);
+        }
+
         tab = steps.slice(0, lvl);
-        for (var s in tab)
+        for (var s in tab) {
             tab[s].show();
+        }
+
     }
 
     // bootstrap atDate datas
@@ -569,56 +601,50 @@ $(document).ready(function () {
         refreshJourneys();
     });
 
-    $('select', fromStationNode).change(function (event) {
 
-        var id = event.target.value;
-        toStationNode.hide();
-        //$("#showReverse").hide();
+    $('#fromStationSelect').focus(function () {
+        $(this).val('');
+        $('#toStationSelect').val('');
+        $("#smeToStation").hide();
+        atDateNode.hide();
+        resultsNode.hide();
 
-        if (id) {
-
-            loadStations(toStationNode, $(this).val(), function () {
-                step(2);
-                toStationNode.show();
-                //$("#showReverse").show();
-            });
-
-        } else {
-
-            toStationNode.hide();
-
-            atDateNode.hide();
-            resultsNode.hide();
-        }
     });
 
-    $('select', toStationNode).change(function (event) {
-        var id = event.target.value;
-        if (id) {
+    $('#toStationSelect').focus(function () {
+        $(this).val('');
+        atDateNode.hide();
+        resultsNode.hide();
 
-            if ($('select', toStationNode).val() == $('select', fromStationNode).val()) {
-                $('.selector', toStationNode).val('');
-                step(2);
-                return;
-            }
-            WINDOW_HOURS = 2;
-            // $('input', toStationNode).removeClass('placeholder');
-            toStationNode.hide();
+    });
 
-            step(3);
-            refreshWindowInfo();
-            refreshJourneys();
-        } else {
 
-            atDateNode.hide();
-            resultsNode.hide();
-        }
+    /*Initier tous les deux onglets*/
+
+    $('.expressFormUnit ul#myTab.tabNav li.active').click(function () {
+
+        $('#fromStationSelect').val('');
+        $('#toStationSelect').val('');
+        $("#smeToStation").hide();
+        atDateNode.hide();
+        resultsNode.hide();
+        $("#downloadTimeTablePDFTime").hide();
+        $('#timetableSearch .tableResults').hide();
+        $('#timetableSearch .tableResults').hide();
+        $('.routes').hide();
+        $('.timetables').hide();
+        $('#timetableTime').hide();
+        $("#uniform-lines span").empty();
+        $("#uniform-lines span").append('Lignes');
+        $('#lines option:eq(0)').prop('selected', true)
+
     });
 
     var refreshJourneys = function () {
         $('.loading', atDateNode).removeClass('hidden');
-        getJourneys($('select', fromStationNode).val(),
-            $('select', toStationNode).val(),
+        getJourneys(
+            fromStationNode.val(),
+            toStationNode.val(),
             $('input[name=smeDepartureDay]', atDateNode).val(),
             $('select[name=smeDepartureHours]', atDateNode).val(),
             $('select[name=smeDepartureMins]', atDateNode).val());
@@ -638,9 +664,9 @@ $(document).ready(function () {
     // init
     bootstrapAtDate();
     step(0);
-    loadStations(fromStationNode, null, function () {
+    loadStations(fromStationNode.val(), null, function () {
         step(1);
-        $('input', fromStationNode).removeClass('placeholder').focus();
+        $(fromStationNode).focus();
     });
     refreshWindowInfo();
 
@@ -660,19 +686,6 @@ $(document).ready(function () {
         applyTimeToTimetable(time);
     });
 
-
-    // permutation de deux elemnt html
-
-    $.fn.swapWith = function (to) {
-        return this.each(function () {
-            var copy_to = $(to).clone(true);
-            var copy_from = $(this).clone(true);
-            $(to).replaceWith(copy_from);
-            $(this).replaceWith(copy_to);
-        });
-    };
-
-
 //Inverse Station
     var flag = true;
 
@@ -681,21 +694,22 @@ $(document).ready(function () {
 
         if (flag) {
 
-            // $("#smeFromStation").swapWith("#smeToStation");
+            var text_fromStation_select =  $('#fromStationSelect').val();
+            var text_toStation_select = $('#toStationSelect').val();
 
-            var text_fromStation_select = $("#uniform-fromStationSelect span").text();
-            var text_toStation_select = $("#uniform-toStationSelect span").text();
+            $('#fromStationSelect').val(text_toStation_select);
+            $('#toStationSelect').val(text_fromStation_select);
 
-            $("#uniform-fromStationSelect span").empty();
-            $("#uniform-toStationSelect span").empty();
 
-            $("#uniform-toStationSelect span").append(text_fromStation_select);
-            $("#uniform-fromStationSelect span").append(text_toStation_select);
+            var valFromStationNode = fromStationNode.val();
+            var valToStationNode =  toStationNode.val();
+
+            fromStationNode.val(valToStationNode);
+            toStationNode.val(valFromStationNode);
 
             getJourneys(
-
-                $('select', toStationNode).val(),
-                $('select', fromStationNode).val(),
+                fromStationNode.val(),
+                toStationNode.val(),
                 $('input[name=smeDepartureDay]', atDateNode).val(),
                 $('select[name=smeDepartureHours]', atDateNode).val(),
                 $('select[name=smeDepartureMins]', atDateNode).val()
@@ -705,21 +719,21 @@ $(document).ready(function () {
 
         } else {
 
-            // $("#smeToStation").swapWith("#smeFromStation");
+            var text_fromStation_select =  $('#fromStationSelect').val();
+            var text_toStation_select = $('#toStationSelect').val();
 
-            var text_fromStation_select = $("#uniform-fromStationSelect span").text();
-            var text_toStation_select = $("#uniform-toStationSelect span").text();
+            $('#fromStationSelect').val(text_toStation_select);
+            $('#toStationSelect').val(text_fromStation_select);
 
-            $("#uniform-fromStationSelect span").empty();
-            $("#uniform-toStationSelect span").empty();
+            var valFromStationNode = fromStationNode.val();
+            var valToStationNode =  toStationNode.val();
 
-            $("#uniform-toStationSelect span").append(text_fromStation_select);
-            $("#uniform-fromStationSelect span").append(text_toStation_select);
-
+            fromStationNode.val(valToStationNode);
+            toStationNode.val(valFromStationNode);
 
             getJourneys(
-                $('select', fromStationNode).val(),
-                $('select', toStationNode).val(),
+                fromStationNode.val(),
+                toStationNode.val(),
                 $('input[name=smeDepartureDay]', atDateNode).val(),
                 $('select[name=smeDepartureHours]', atDateNode).val(),
                 $('select[name=smeDepartureMins]', atDateNode).val()
@@ -732,4 +746,3 @@ $(document).ready(function () {
     });
 
 })
-

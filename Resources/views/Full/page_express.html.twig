@@ -1,17 +1,11 @@
-{% extends pageLayout %}
+{% extends "CGFrontBundle:Layout:home.html.twig" %}
 {% set body_class = "bodyPage bodyForm bodySMExpress" %}
 {% set body_id = "sm-express" %}
 
-{% block stylesheets_more %}
+{% block javascripts %}
     {{ parent() }}
-    {% stylesheets 'bundles/smexpress/stylesheets/style_smexpress.css' filter='cssrewrite' %}
-    <link rel="stylesheet" type="text/css" href="{{ asset_url }}"/>
-    {% endstylesheets %}
-{% endblock %}
-
-{% block javascripts_more %}
-    {{ parent() }}
-    {% javascripts '@SMExpressBundle/Resources/public/javascripts/sme_api/search_express.js' %}
+    {% javascripts
+    '@CGFrontBundle/Resources/public/javascripts/sme_api/search_express.js' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}
@@ -190,15 +184,17 @@
             <form id="smeJourneySearchForm" action="#" method="post">
                 <div class="field fromStation" id="smeFromStation">
                     <label for="fromStationSelect">Départ</label>
-                    <select id="fromStationSelect" name="fromStationSelect">
-                        <option value="">Station de départ</option>
-                    </select>
+                            <span class="picStation">
+                              <input type="text" id="fromStationSelect" name="fromStationSelect"  class="fromStationInput" placeholder="Station de départ" />
+                              <input type="hidden" id="fromStationSelectHidden"  value="" />
+                            </span>
                 </div>
                 <div class="field toStation" id="smeToStation">
                     <label for="toStationSelect">Arrivée</label>
-                    <select id="toStationSelect" name="toStationSelect">
-                        <option value="">Station d'arrivée</option>
-                    </select>
+                            <span class="picStation">
+                              <input type="text" id="toStationSelect" name="toStationSelect"  class="toStationInput" placeholder="Station d'arrivée" />
+                                <input type="hidden" id="toStationSelectHidden"  value="" />
+                            </span>
                 </div>
                 <button id="showReverse" class="btnReverse" type="button">Inverser</button>
                 <div class="field" id="smeDepartureTime">
@@ -322,8 +318,8 @@
         <!-- /tabContent -->
         </section>
         </section>
-        <input id="urlAPI" type="hidden" value="{{ urlAPI }}" />
         <!-- /colMedium -->
+        <input id="urlAPI" type="hidden" value="{{ urlAPI }}" />
         {% block right_column %}
             <!-- aside -->
             <aside role="complementary">
