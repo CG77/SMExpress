@@ -4,7 +4,6 @@
 
 $(document).ready(function () {
 
-
     /* Onglet 1 : Consulter des horaires */
     // GLOBALS
 
@@ -23,19 +22,27 @@ $(document).ready(function () {
     $("#uniform-timetableTimeHoursMins span").empty();
     $("#uniform-timetableTimeHoursMins span").append(now.getMinutes());
 
+    // jQuery.support.cors = true;
 
-    $.ajax({
-        url: URLAPI + '/API/lines',
-        dataType: "json",
-        success: function (data) {
+    if (window.XDomainRequest) {
+        // Use Microsoft XDR
+        var xdr = new XDomainRequest();
+        xdr.open("get", URLAPI + '/API/lines');
+        xdr.onload = function () {
+            var JSON = $.parseJSON(xdr.responseText);
+            if (JSON == null || typeof (JSON) == 'undefined') {
+                JSON = $.parseJSON(data.firstChild.textContent);
+            }
+
+
             $("#uniform-lines span").append('Lignes');
             $("#uniform-routes span").append('Parcours');
             $("#uniform-timetables span").append('Fiche horaire');
 
             $("#lines").empty().append('<option value="">Lignes</option>');
 
-            for (var l in data) {
-                var line = data[l];
+            for (var l in JSON) {
+                var line = JSON[l];
                 var name = line.name;
                 if (line.commercialName)
                     name += " - " + line.commercialName;
@@ -44,9 +51,38 @@ $(document).ready(function () {
             ;
             $('#lines').focus();
 
-        }
-    });
+        };
+        xdr.send();
+    } else {
 
+        $.ajax({
+            // crossDomain: true,
+            url: URLAPI + '/API/lines',
+            dataType: "json",
+            success: function (data) {
+                $("#uniform-lines span").append('Lignes');
+                $("#uniform-routes span").append('Parcours');
+                $("#uniform-timetables span").append('Fiche horaire');
+
+                $("#lines").empty().append('<option value="">Lignes</option>');
+
+                for (var l in data) {
+                    var line = data[l];
+                    var name = line.name;
+                    if (line.commercialName)
+                        name += " - " + line.commercialName;
+                    $("#lines").append('<option value="' + line.lineId + '">' + name + '</option>');
+                }
+                ;
+                $('#lines').focus();
+
+            }, error: function (s, r, e) {
+                // console.log(e);
+
+            }
+        });
+
+    }
     $('.routes').hide();
     $('#timetable').hide();
     $('.timetables').hide();
@@ -61,18 +97,25 @@ $(document).ready(function () {
         $('#timetableSearch .tableResults').hide();
         $('#timetableSearch .tableResults').hide();
         if (id) {
-            $.ajax({
-                url: URLAPI + '/API/lines/' + id,
-                dataType: "json",
-                //async: true,
-                success: function (data) {
-                    // $("#uniform-routes span").append('Parcours');
+
+            if (window.XDomainRequest) {
+
+                // Use Microsoft XDR
+                var xdr = new XDomainRequest();
+                xdr.open("get", URLAPI + '/API/lines/' + id);
+                xdr.onload = function () {
+                    var JSON = $.parseJSON(xdr.responseText);
+                    if (JSON == null || typeof (JSON) == 'undefined') {
+                        JSON = $.parseJSON(data.firstChild.textContent);
+                    }
+
+
                     $("#routes").empty().append('<option value="">Parcours</option>');
                     $("#uniform-routes span").empty();
                     $("#uniform-routes span").append('Parcours');
 
-                    for (var r in data.routes) {
-                        var element = data.routes[r];
+                    for (var r in JSON.routes) {
+                        var element = JSON.routes[r];
                         $("#routes").append('<option value="' + element.routeId + '">' + element.name + '</option>');
                     }
                     ;
@@ -82,10 +125,38 @@ $(document).ready(function () {
                     $(".routes select").focus();
 
 
-                }
-            });
-        }
-        else {
+                };
+                xdr.send();
+
+
+            } else {
+
+                $.ajax({
+                    url: URLAPI + '/API/lines/' + id,
+                    dataType: "json",
+                    //async: true,
+                    success: function (data) {
+                        // $("#uniform-routes span").append('Parcours');
+                        $("#routes").empty().append('<option value="">Parcours</option>');
+                        $("#uniform-routes span").empty();
+                        $("#uniform-routes span").append('Parcours');
+
+                        for (var r in data.routes) {
+                            var element = data.routes[r];
+                            $("#routes").append('<option value="' + element.routeId + '">' + element.name + '</option>');
+                        }
+                        ;
+                        $(".routes").show();
+                        $('.timetables').hide();
+                        $('#timetableTime').hide();
+                        $(".routes select").focus();
+
+
+                    }
+                });
+            }
+
+        } else {
             $('.routes').hide();
             $('.timetables').hide();
             $('#timetableTime').hide();
@@ -98,17 +169,25 @@ $(document).ready(function () {
         var id = event.target.value;
         $('#timetableSearch .tableResults').hide();
         if (id) {
-            $.ajax({
-                url: URLAPI + '/API/routes/' + id,
-                dataType: "json",
-                //async: false,
-                success: function (data) {
-                    // $("#uniform-timetables span").append('Fiche horaire');
+
+            if (window.XDomainRequest) {
+
+
+                // Use Microsoft XDR
+                var xdr = new XDomainRequest();
+                xdr.open("get", URLAPI + '/API/routes/' + id);
+                xdr.onload = function () {
+                    var JSON = $.parseJSON(xdr.responseText);
+                    if (JSON == null || typeof (JSON) == 'undefined') {
+                        JSON = $.parseJSON(data.firstChild.textContent);
+                    }
+
+
                     $("#timetables").empty().append('<option value="">Fiche horaire</option>');
                     $("#uniform-timetables span").empty();
                     $("#uniform-timetables span").append('Fiche horaire');
-                    for (var t in data.timetables) {
-                        var element = data.timetables[t];
+                    for (var t in JSON.timetables) {
+                        var element = JSON.timetables[t];
                         $("#timetables").append('<option value="' + element.timetableId + '">' + element.name + '</option>');
                     }
                     ;
@@ -116,8 +195,38 @@ $(document).ready(function () {
                     $('.timetables select').focus();
                     $('#timetableTime').show();
 
-                }
-            });
+
+                };
+                xdr.send();
+
+
+            } else {
+
+
+                $.ajax({
+                    url: URLAPI + '/API/routes/' + id,
+                    dataType: "json",
+                    //async: false,
+                    success: function (data) {
+                        // $("#uniform-timetables span").append('Fiche horaire');
+                        $("#timetables").empty().append('<option value="">Fiche horaire</option>');
+                        $("#uniform-timetables span").empty();
+                        $("#uniform-timetables span").append('Fiche horaire');
+                        for (var t in data.timetables) {
+                            var element = data.timetables[t];
+                            $("#timetables").append('<option value="' + element.timetableId + '">' + element.name + '</option>');
+                        }
+                        ;
+                        $('.timetables').show();
+                        $('.timetables select').focus();
+                        $('#timetableTime').show();
+
+                    }
+                });
+
+
+            }
+
         }
         else {
             $('.timetables').hide();
@@ -138,30 +247,39 @@ $(document).ready(function () {
         $('.timetable').hide();
         $('#timetableSearch .tableResults').hide();
         if (id) {
-            $.ajax({
-                url: URLAPI + '/API/timetables/' + id,
-                dataType: "json",
-                async: false,
-                success: function (data) {
+
+            if (window.XDomainRequest) {
+
+
+                // Use Microsoft XDR
+                var xdr = new XDomainRequest();
+                xdr.open("get", URLAPI + '/API/timetables/' + id);
+                xdr.onload = function () {
+                    var JSON = $.parseJSON(xdr.responseText);
+                    if (JSON == null || typeof (JSON) == 'undefined') {
+                        JSON = $.parseJSON(JSON.firstChild.textContent);
+                    }
+
+
                     // clean datas : remove empty journeys
-                    for (var j = 0; j < data.journeys.length;) {
-                        var journey = data.journeys[j];
+                    for (var j = 0; j < JSON.journeys.length;) {
+                        var journey = JSON.journeys[j];
                         if (journey.passages.length == 0)
-                            data.journeys.splice(j, 1);
+                            JSON.journeys.splice(j, 1);
                         else
                             ++j;
                     }
 
                     // clean datas : remove unused stations
-                    for (var s = 0; s < data.stations.length;) {
-                        var station = data.stations[s];
+                    for (var s = 0; s < JSON.stations.length;) {
+                        var station = JSON.stations[s];
                         var stationFound = false;
-                        for (var j = 0; j < data.journeys.length && !stationFound; ++j) {
-                            if (getPassageByStationRouteId(data.journeys[j].passages, station.stationRouteId) != null)
+                        for (var j = 0; j < JSON.journeys.length && !stationFound; ++j) {
+                            if (getPassageByStationRouteId(JSON.journeys[j].passages, station.stationRouteId) != null)
                                 stationFound = true;
                         }
                         if (!stationFound)
-                            data.stations.splice(s, 1);
+                            JSON.stations.splice(s, 1);
                         else
                             ++s;
                     }
@@ -179,8 +297,8 @@ $(document).ready(function () {
                             allExceptionsIds.push(e.id);
                         }
                     }
-                    for (var j in data.journeys) {
-                        var journey = data.journeys[j];
+                    for (var j in JSON.journeys) {
+                        var journey = JSON.journeys[j];
                         var commonException = null;
                         for (var p in journey.passages) {
                             var passage = journey.passages[p];
@@ -197,10 +315,10 @@ $(document).ready(function () {
                         if (commonException)
                             journey.exception = commonException;
                     }
-                    data.exceptions = allExceptions;
+                    JSON.exceptions = allExceptions;
 
                     // Fill the timetable
-                    fillTimetable(data);
+                    fillTimetable(JSON);
                     // TODO : use Page property to get SME Base URL
                     // $("#downloadTimeTablePDFTime").attr("href", "*BASE*/lines/*LINEID*.pdf").show();
                     var lineId = $("#lines option:selected").val();
@@ -209,9 +327,93 @@ $(document).ready(function () {
                         display: "block",
                         textAlign: "right"
                     });
-                }
 
-            });
+
+                };
+                xdr.send();
+
+            } else {
+
+
+                $.ajax({
+                    url: URLAPI + '/API/timetables/' + id,
+                    dataType: "json",
+                    async: false,
+                    success: function (data) {
+                        // clean datas : remove empty journeys
+                        for (var j = 0; j < data.journeys.length;) {
+                            var journey = data.journeys[j];
+                            if (journey.passages.length == 0)
+                                data.journeys.splice(j, 1);
+                            else
+                                ++j;
+                        }
+
+                        // clean datas : remove unused stations
+                        for (var s = 0; s < data.stations.length;) {
+                            var station = data.stations[s];
+                            var stationFound = false;
+                            for (var j = 0; j < data.journeys.length && !stationFound; ++j) {
+                                if (getPassageByStationRouteId(data.journeys[j].passages, station.stationRouteId) != null)
+                                    stationFound = true;
+                            }
+                            if (!stationFound)
+                                data.stations.splice(s, 1);
+                            else
+                                ++s;
+                        }
+
+                        /* compute datas :
+                         * - Record all exceptions
+                         * - for j in journeys, add j.exception field if
+                         all passages of j has the same exception
+                         */
+                        var allExceptions = [];
+                        var allExceptionsIds = [];
+                        var addExceptions = function (e) {
+                            if ($.inArray(e.id, allExceptionsIds) == -1) {
+                                allExceptions.push(e);
+                                allExceptionsIds.push(e.id);
+                            }
+                        }
+                        for (var j in data.journeys) {
+                            var journey = data.journeys[j];
+                            var commonException = null;
+                            for (var p in journey.passages) {
+                                var passage = journey.passages[p];
+                                if (passage.exception) {
+                                    addExceptions(passage.exception);
+                                    if (p == 0)
+                                        commonException = passage.exception;
+                                    else if (commonException && commonException.id != passage.exception.id)
+                                        commonException = null;
+                                }
+                                else
+                                    commonException = null;
+                            }
+                            if (commonException)
+                                journey.exception = commonException;
+                        }
+                        data.exceptions = allExceptions;
+
+                        // Fill the timetable
+                        fillTimetable(data);
+                        // TODO : use Page property to get SME Base URL
+                        // $("#downloadTimeTablePDFTime").attr("href", "*BASE*/lines/*LINEID*.pdf").show();
+                        var lineId = $("#lines option:selected").val();
+                        $("#downloadTimeTablePDFTime").attr("href", pdfUrl(lineId)).show().css({
+                            marginTop: "10px",
+                            display: "block",
+                            textAlign: "right"
+                        });
+                    }
+
+                });
+
+
+            }
+
+
         }
     });
 
@@ -388,29 +590,48 @@ $(document).ready(function () {
     var resultsNode = $('#journeySearch .tableResults');
 
 
-    var loadStations = function (container, stationFromId, onSuccess) {
-        $("#smeToStation").hide();
-        $.getJSON(URLAPI + '/API/stations' + (!stationFromId ? '' : '/from/' + stationFromId), function (data) {
+    if (window.XDomainRequest) {
 
-            var aStation = $.map(data, function (item) {
+
+        $("#smeToStation").hide();
+
+        // Use Microsoft XDR
+        var xdr2 = new XDomainRequest();
+        xdr2.open("get", URLAPI + '/API/stations');
+        xdr2.onload = function () {
+            var JSON = $.parseJSON(xdr2.responseText);
+            if (JSON == null || typeof (JSON) == 'undefined') {
+                JSON = $.parseJSON(data.firstChild.textContent);
+            }
+
+            var aStation = $.map(JSON, function (item) {
                 return {
-                    label: item.town+' - '+item.name,
-                    value: item.town+' - '+item.name,
+                    label: item.town + ' - ' + item.name,
+                    value: item.town + ' - ' + item.name,
                     id: item.id
                 };
             })
-            //console.log(result);
+
             $("#fromStationSelect").autocomplete({
                 source: aStation,
                 select: function (event, ui) {
                     //alert(ui.item.id);
-
                     toStationNode.show();
-                    $.getJSON(URLAPI + '/API/stations/from/' + ui.item.id, function (data) {
-                        var aFrom = $.map(data, function (item) {
+
+
+                    var xdr3 = new XDomainRequest();
+                    xdr3.open("get", URLAPI + '/API/stations/from/' + ui.item.id);
+                    xdr3.onload = function () {
+                        var JSON = $.parseJSON(xdr3.responseText);
+                        if (JSON == null || typeof (JSON) == 'undefined') {
+                            JSON = $.parseJSON(data.firstChild.textContent);
+                        }
+
+
+                        var aFrom = $.map(JSON, function (item) {
                             return {
-                                label: item.town+' - '+item.name,
-                                value: item.town+' - '+item.name,
+                                label: item.town + ' - ' + item.name,
+                                value: item.town + ' - ' + item.name,
                                 id: item.id
                             };
                         })
@@ -429,18 +650,86 @@ $(document).ready(function () {
                                     $('select[name=smeDepartureHours]', atDateNode).val(),
                                     $('select[name=smeDepartureMins]', atDateNode).val());
 
-
+                                $("#showReverse").show();
                             }
 
                         });
 
-                    });
+
+                    };
+                    xdr3.send();
+
 
                 }
             });
 
-            if (onSuccess) onSuccess();
-        });
+
+        };
+        xdr2.send();
+
+
+    } else {
+
+
+        var loadStations = function () {
+            $("#smeToStation").hide();
+
+
+            $.getJSON(URLAPI + '/API/stations', function (data) {
+
+                var aStation = $.map(data, function (item) {
+                    return {
+                        label: item.town + ' - ' + item.name,
+                        value: item.town + ' - ' + item.name,
+                        id: item.id
+                    };
+                })
+                //console.log(result);
+                $("#fromStationSelect").autocomplete({
+                    source: aStation,
+                    select: function (event, ui) {
+                        //alert(ui.item.id);
+
+                        toStationNode.show();
+                        $.getJSON(URLAPI + '/API/stations/from/' + ui.item.id, function (data) {
+                            var aFrom = $.map(data, function (item) {
+                                return {
+                                    label: item.town + ' - ' + item.name,
+                                    value: item.town + ' - ' + item.name,
+                                    id: item.id
+                                };
+                            })
+                            $("#fromStationSelectHidden").val(ui.item.id);
+                            $("#smeToStation").show();
+                            $("#toStationSelect").autocomplete({
+                                source: aFrom,
+                                select: function (event, ui) {
+
+                                    $("#toStationSelectHidden").val(ui.item.id);
+
+                                    getJourneys(
+                                        fromStationNode.val(),
+                                        toStationNode.val(),
+                                        $('input[name=smeDepartureDay]', atDateNode).val(),
+                                        $('select[name=smeDepartureHours]', atDateNode).val(),
+                                        $('select[name=smeDepartureMins]', atDateNode).val());
+
+                                    $("#showReverse").show();
+                                }
+
+                            });
+
+                        });
+
+                    }
+                });
+
+            });
+
+
+        }
+
+
     }
 
 
@@ -490,26 +779,32 @@ $(document).ready(function () {
     }
 
     var getJourneys = function (stationFromId, stationToId, date, hours, minutes) {
-        $.ajax({
-            dataType: 'json',
-            url: URLAPI + '/API/journeys/' + stationFromId + '/' + stationToId,
-            async: false,
-            type: 'GET',
-            data: { date: date, hours: hours, minutes: minutes, windowMinutes: 60 * WINDOW_HOURS },
-            success: function (data) {
+        if (window.XDomainRequest) {
+
+            // Use Microsoft XDR
+            var xdr = new XDomainRequest();
+            var param = "?date=" + date.split('/').join('%2F') + "&hours=" + hours + "&minutes=" + minutes + "&windowMinutes=" + (60 * WINDOW_HOURS);
+            xdr.open("get", URLAPI + '/API/journeys/' + stationFromId + '/' + stationToId + param);
+            xdr.onload = function () {
+                var JSON = $.parseJSON(xdr.responseText);
+                if (JSON == null || typeof (JSON) == 'undefined') {
+                    JSON = $.parseJSON(data.firstChild.textContent);
+                }
+
+
                 var table = $('table.journeys', resultsNode).empty();
                 var thead = $('<thead />');
                 var tbody = $('<tbody />');
                 table.append(thead);
                 table.append(tbody);
-                thead.append('<tr class="townName"><th class="fromStation">' + data.fromStation.townName + '</th>' +
-                    '<th class="toStation">' + data.toStation.townName + '</th></tr>');
-                thead.append('<tr class="stationName"><th class="fromStation">' + data.fromStation.name + '</th>' +
-                    '<th class="toStation">' + data.toStation.name + '</th></tr>');
-                if (data.journeys.length != 0) {
+                thead.append('<tr class="townName"><th class="fromStation">' + JSON.fromStation.townName + '</th>' +
+                    '<th class="toStation">' + JSON.toStation.townName + '</th></tr>');
+                thead.append('<tr class="stationName"><th class="fromStation">' + JSON.fromStation.name + '</th>' +
+                    '<th class="toStation">' + JSON.toStation.name + '</th></tr>');
+                if (JSON.journeys.length != 0) {
                     var hourPairs = [];
-                    for (var j in data.journeys) {
-                        var journey = data.journeys[j];
+                    for (var j in JSON.journeys) {
+                        var journey = JSON.journeys[j];
                         var from = null;
                         var to = null;
                         for (var p = 0; p < journey.passages.length && !(from && to); ++p) {
@@ -535,23 +830,86 @@ $(document).ready(function () {
                     tbody.append('<tr><td colspan="2" class="noItems">Aucun résultat pour cette configuration</td></tr>');
                 }
                 step(5);
-                $('.loading', atDateNode).addClass('hidden');
-                if (data.lineId) {
-                    $("#downloadTimeTablePDFJourney").attr("href", pdfUrl(data.lineId)).show().css({
+                // $('.loading', atDateNode).addClass('hidden');
+                //$('.api-loader').hide();
+
+                $(".btnInfo").tooltip({
+                    placement: 'top'
+                });
+
+                if (JSON.lineId) {
+                    $("#downloadTimeTablePDFJourney").attr("href", pdfUrl(JSON.lineId)).show().css({
                         marginTop: "10px",
                         display: "block",
                         textAlign: "right"
                     });
                 }
-            }
+            };
+            xdr.send();
+        } else {
+            $.ajax({
+                dataType: 'json',
+                url: URLAPI + '/API/journeys/' + stationFromId + '/' + stationToId,
+                async: false,
+                type: 'GET',
+                data: { date: date, hours: hours, minutes: minutes, windowMinutes: 60 * WINDOW_HOURS },
+                success: function (data) {
+                    var table = $('table.journeys', resultsNode).empty();
+                    var thead = $('<thead />');
+                    var tbody = $('<tbody />');
+                    table.append(thead);
+                    table.append(tbody);
+                    thead.append('<tr class="townName"><th class="fromStation">' + data.fromStation.townName + '</th>' +
+                        '<th class="toStation">' + data.toStation.townName + '</th></tr>');
+                    thead.append('<tr class="stationName"><th class="fromStation">' + data.fromStation.name + '</th>' +
+                        '<th class="toStation">' + data.toStation.name + '</th></tr>');
+                    if (data.journeys.length != 0) {
+                        var hourPairs = [];
+                        for (var j in data.journeys) {
+                            var journey = data.journeys[j];
+                            var from = null;
+                            var to = null;
+                            for (var p = 0; p < journey.passages.length && !(from && to); ++p) {
+                                var passage = journey.passages[p];
+                                if (passage.stationId == stationFromId) from = passage;
+                                else if (from && passage.stationId == stationToId) to = passage;
+                            }
+                            if (from && to)
+                                hourPairs.push({ from: from, to: to, journey: journey });
+                        }
+                        hourPairs.sort(function (a, b) {
+                            return a.from.time.hours * 60 + a.from.time.minutes > b.from.time.hours * 60 + b.from.time.minutes;
+                        });
+                        for (var h = 0; h < hourPairs.length; ++h) {
+                            var hourPair = hourPairs[h];
+                            var tr = $('<tr/>').addClass('journey').addClass(h % 2 ? 'odd' : 'even');
+                            tr.append(getTimeTd(hourPair.from).attr('class', 'passage fromStation')).append(getTimeTd(hourPair.to).attr('class', 'passage toStation'));
+                            tr.append(getInfoTd(journey));
+                            tbody.append(tr);
+                        }
+                    }
+                    if ($('tr.journey', table).size() == 0) {
+                        tbody.append('<tr><td colspan="2" class="noItems">Aucun résultat pour cette configuration</td></tr>');
+                    }
+                    step(5);
+                    //$('.loading', atDateNode).addClass('hidden');
+                    // $('.api-loader').hide();
+                    if (data.lineId) {
+                        $("#downloadTimeTablePDFJourney").attr("href", pdfUrl(data.lineId)).show().css({
+                            marginTop: "10px",
+                            display: "block",
+                            textAlign: "right"
+                        });
+                    }
+                }
 
+            });
 
-        });
+            $(".btnInfo").tooltip({
+                placement: 'top'
+            });
 
-        $(".btnInfo").tooltip({
-            placement: 'top'
-        });
-
+        }
 
     }
 
@@ -608,6 +966,7 @@ $(document).ready(function () {
         $("#smeToStation").hide();
         atDateNode.hide();
         resultsNode.hide();
+        $("#showReverse").hide();
 
     });
 
@@ -618,11 +977,9 @@ $(document).ready(function () {
 
     });
 
-
     /*Initier tous les deux onglets*/
 
     $('.expressFormUnit ul#myTab.tabNav li.active').click(function () {
-
         $('#fromStationSelect').val('');
         $('#toStationSelect').val('');
         $("#smeToStation").hide();
@@ -641,7 +998,7 @@ $(document).ready(function () {
     });
 
     var refreshJourneys = function () {
-        $('.loading', atDateNode).removeClass('hidden');
+        // $('.api-loader').show();
         getJourneys(
             fromStationNode.val(),
             toStationNode.val(),
@@ -655,7 +1012,6 @@ $(document).ready(function () {
     };
 
     $('.more').click(function () {
-
         WINDOW_HOURS++;
         refreshWindowInfo();
         refreshJourneys();
@@ -664,12 +1020,10 @@ $(document).ready(function () {
     // init
     bootstrapAtDate();
     step(0);
-    loadStations(fromStationNode.val(), null, function () {
-        step(1);
-        $(fromStationNode).focus();
-    });
+    if (!window.XDomainRequest) {
+        loadStations();
+    }
     refreshWindowInfo();
-
 
     // Changer horaire du resultat
 
@@ -694,7 +1048,7 @@ $(document).ready(function () {
 
         if (flag) {
 
-            var text_fromStation_select =  $('#fromStationSelect').val();
+            var text_fromStation_select = $('#fromStationSelect').val();
             var text_toStation_select = $('#toStationSelect').val();
 
             $('#fromStationSelect').val(text_toStation_select);
@@ -702,7 +1056,7 @@ $(document).ready(function () {
 
 
             var valFromStationNode = fromStationNode.val();
-            var valToStationNode =  toStationNode.val();
+            var valToStationNode = toStationNode.val();
 
             fromStationNode.val(valToStationNode);
             toStationNode.val(valFromStationNode);
@@ -719,14 +1073,14 @@ $(document).ready(function () {
 
         } else {
 
-            var text_fromStation_select =  $('#fromStationSelect').val();
+            var text_fromStation_select = $('#fromStationSelect').val();
             var text_toStation_select = $('#toStationSelect').val();
 
             $('#fromStationSelect').val(text_toStation_select);
             $('#toStationSelect').val(text_fromStation_select);
 
             var valFromStationNode = fromStationNode.val();
-            var valToStationNode =  toStationNode.val();
+            var valToStationNode = toStationNode.val();
 
             fromStationNode.val(valToStationNode);
             toStationNode.val(valFromStationNode);
