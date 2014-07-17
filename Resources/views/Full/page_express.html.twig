@@ -1,4 +1,4 @@
-{% extends "CGFrontBundle:Layout:home.html.twig" %}
+{% extends pageLayout %}
 {% set body_class = "bodyPage bodyForm bodySMExpress" %}
 {% set body_id = "sm-express" %}
 
@@ -196,7 +196,7 @@
                                 <input type="hidden" id="toStationSelectHidden"  value="" />
                             </span>
                 </div>
-                <button id="showReverse" class="btnReverse" type="button">Inverser</button>
+                <button id="showReverse" class="btnReverse" type="button" style="display: none;" >Inverser</button>
                 <div class="field" id="smeDepartureTime">
                     <div class="oneLine toDay">
                         <label for="smeDepartureDay" title="Jour">Le </label>
@@ -304,7 +304,7 @@
                     <table class="journeys item">
                     </table>
                 </div>
-                <div class="more" style="">
+                <div class="more" >
                     <a href="#dev">Voir plus de résultats</a>
                 </div>
                 <div class="info">(afficher les <span class="hours">3</span> prochaines heures)</div>
