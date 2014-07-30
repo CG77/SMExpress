@@ -1,4 +1,4 @@
 parameters:
     #URL API SM-Express
     api_smexpress: http://sme.seine-et-marne.fr
-    page_layout: CGFrontBundle:Layout:home.html.twig
+
