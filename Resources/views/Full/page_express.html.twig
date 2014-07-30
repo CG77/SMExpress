@@ -1,33 +1,13 @@
-{% extends "CGFrontBundle:Layout:home.html.twig" %}
 {% set body_class = "bodyPage bodyForm bodySMExpress" %}
 {% set body_id = "sm-express" %}
 
-{% block javascripts %}
-    {{ parent() }}
-    {% javascripts
-    '@CGFrontBundle/Resources/public/javascripts/sme_api/search_express.js' %}
-    <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-{% endblock %}
-
 {% block content %}
     {% block lowerSection %}
-        <section class="lowerSection">
-        <div id="utils">
-            <div class="wrapper">
-                {{ render( controller('CGFrontBundle:Layout:breadcrumb',{
-                'locationId': location.id, })
-                ) }}
-                {% include "CGFrontBundle:Common:social_tools.html.twig" %}
-            </div>
-        </div>
-        <div class="wrapper">
         <!-- colMedium -->
-        <section class="colMedium">
-        {% include "CGFrontBundle:Common:tooltip.html.twig" %}
+
         <article class="paneContent">
             <header class="paneHeader">
-                <h1> {{ ez_render_field(content, 'title') }}</h1>
+                <h1>  {{ ez_render_field(content, 'title') }}</h1>
             </header>
         </article>
         <section class="box tabsUnit formUnit expressFormUnit">
@@ -196,7 +176,7 @@
                                 <input type="hidden" id="toStationSelectHidden"  value="" />
                             </span>
                 </div>
-                <button id="showReverse" class="btnReverse" type="button">Inverser</button>
+                <button id="showReverse" class="btnReverse" type="button" style="display: none;" >Inverser</button>
                 <div class="field" id="smeDepartureTime">
                     <div class="oneLine toDay">
                         <label for="smeDepartureDay" title="Jour">Le </label>
@@ -304,7 +284,7 @@
                     <table class="journeys item">
                     </table>
                 </div>
-                <div class="more" style="">
+                <div class="more" >
                     <a href="#dev">Voir plus de résultats</a>
                 </div>
                 <div class="info">(afficher les <span class="hours">3</span> prochaines heures)</div>
@@ -317,19 +297,10 @@
         </div>
         <!-- /tabContent -->
         </section>
-        </section>
+
         <!-- /colMedium -->
         <input id="urlAPI" type="hidden" value="{{ urlAPI }}" />
-        {% block right_column %}
-            <!-- aside -->
-            <aside role="complementary">
-                {% if not ez_is_field_empty(content,'right_column') %}
-                    {{ ez_render_field( content, 'right_column', {'LocationId':location.id} ) }}
-                {% endif %}
-            </aside>
-            <!-- /aside -->
-        {% endblock %}
-        </div>
-        </section>
+
+
     {% endblock %}
 {% endblock %}

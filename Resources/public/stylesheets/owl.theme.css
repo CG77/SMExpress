@@ -1,0 +1,182 @@
+
+/***************** carousel owl-theme *******************/
+
+/* next and prev buttons */
+.owl-theme .owl-controls .owl-buttons div {
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	z-index: 5;
+	width: 1.840490797546%;  /* 18px / 942px */
+	height: 100%;
+	text-indent: -999em;
+	opacity: 0.5;
+	filter: alpha(opacity=50);
+	font-size: 1em;
+	color: #FFF;
+	text-align: center;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+.owl-theme .owl-controls .owl-buttons .owl-next {
+	left: auto;
+	right: 0;
+}
+.owl-theme .owl-controls .owl-buttons div:hover,
+.owl-theme .owl-controls .owl-buttons div:focus {
+	color: #FFF;
+	text-decoration: none;
+	opacity: 0.9;
+	filter: alpha(opacity=90);
+	outline: none;
+}
+.owl-theme .owl-controls .owl-buttons div:before {
+	width: 0;
+	height: 0;
+	border-top: .833em solid transparent;
+	border-bottom: .833em solid transparent;
+	content: '';
+	display: block;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin-top: -.833em;
+}
+.owl-theme .owl-controls .owl-buttons .owl-prev:before {
+	border-right: .833em solid #FFF;
+	margin-left: -.6em;
+}
+.owl-theme .owl-controls .owl-buttons .owl-next:before {
+	border-left: .833em solid #FFF;
+	margin-left: -.3em;
+}
+.owl-theme .owl-controls.clickable .owl-buttons div:hover {
+	text-decoration: none;
+	opacity: 0.9;
+	filter: alpha(opacity=90);
+	outline: none;
+}
+
+/* pagination */
+.owl-theme .owl-pagination {
+	position: absolute;
+	bottom: -21px;
+	left: 0;
+	z-index: 15;
+	width: 100%;
+	text-align: center;
+	font-size: 0;
+}
+.owl-theme .owl-controls .owl-page {
+	display: inline-block;
+	width: 14px;
+	height: 14px;
+	margin: 0 8px;
+}
+.owl-theme .owl-controls .owl-page span {
+	display: block;
+	width: 14px;
+	height: 14px;
+	border-radius: 14px;
+	cursor: pointer;
+	background: #0C404D;
+}
+.owl-theme .owl-controls .owl-page.active span {
+	background: #FFF;
+} 
+.owl-theme .owl-controls.clickable .owl-page:hover span {
+	opacity: 0.9;
+	filter: alpha(opacity=90);
+}
+
+/* paginationNumbers */
+.owl-theme .owl-controls .owl-page span.owl-numbers {
+	height: auto;
+	width: auto;
+	color: #FFF;
+	padding: 2px 10px;
+}
+.owl-theme .owl-controls .owl-page.active span.owl-numbers {
+	color: #0C404D;
+}
+
+/* preloading images */
+.owl-item.loading {
+	min-height: 150px;
+	background: url(../../public/images/pic-ajaxloader.png) no-repeat 50% 50%;
+}
+
+/* Home-N-1 owl-theme carousel */
+.bodyHomeSub01 .owl-theme {
+	overflow: visible;
+	padding: 0 0 0 18px;
+}
+.owl-item .newsUnit {
+	width: 94.375%;
+	margin: 0;
+}
+
+/* media queries */
+@media screen and (max-width: 1000px) {
+	.bodyHomeSub01 .owl-theme {
+		padding: 0 0 0 2.735562310030%;  /* 18px / 658px */
+	}
+	.owl-theme .owl-controls .owl-buttons div {
+		width: 2.735562310030%;  /* 18px / 658px */
+	}
+}
+@media screen and (min-width: 768px) {
+	.owl-theme .owl-controls .owl-buttons .owl-prev {
+		min-height: 369px;
+	}
+}
+@media screen and (max-width: 610px) {
+	.owl-theme .owl-controls .owl-buttons div {
+		height: 18px;
+		top: auto;
+		color: #0C404D;
+		opacity: 1.0;
+		filter: alpha(opacity=100);
+		text-shadow: none;
+ 		z-index: 16;
+	}
+	.owl-theme .owl-controls .owl-buttons div:hover,
+	.owl-theme .owl-controls .owl-buttons div:focus {
+		color: #0C404D;
+		opacity: 1.0;
+		filter: alpha(opacity=100);
+	}
+	.owl-theme .owl-controls .owl-buttons .owl-prev:before {
+		border-right: .833em solid #0C404D;
+		margin-left: .8em;
+	}
+	.owl-theme .owl-controls .owl-buttons .owl-next:before {
+		border-left: .833em solid #0C404D;
+		margin-left: -1.6em;
+	}
+	.owl-theme .owl-controls .owl-buttons .owl-prev, 
+	.owl-theme .owl-controls .owl-buttons .owl-next {
+ 		top: auto;
+ 		bottom: -23px;
+	}
+	.owl-theme .owl-controls .owl-page {
+		margin: 0 10px;
+	}
+}
+@media screen and (max-width: 500px) {
+	.bodyHomeSub01 .owl-theme {
+		padding: 0 2.735562310030%;  /* 18px / 658px */
+	}
+	.owl-item .newsUnit {
+		width: 100%;
+	}
+}
+@media screen and (max-width: 320px) {
+	.owl-theme .owl-controls .owl-buttons .owl-prev:before {
+		margin-left: .4em;
+	}
+	.owl-theme .owl-controls .owl-buttons .owl-next:before {
+		border-left: .833em solid #0C404D;
+		margin-left: -1.2em;
+	}
+}

@@ -1,0 +1,147 @@
+{% if app.request.isXmlHttpRequest and module_result is defined %}
+    {# we are in a legacy rendered module #}
+    {{ module_result.content|raw }}
+{% else %}
+<!DOCTYPE html>
+    <!--[if lt IE 8]><html class="ie oldie noJS" lang="fr"><![endif]-->
+    <!--[if IE 8]><html class="ie ie8 noJS" lang="fr"><![endif]-->
+    <!--[if IE 9]><html class="ie ie9 noJS" lang="fr"><![endif]-->
+    <!--[if gt IE 9]><!-->
+    <html class="noJS" lang="fr"><!--<![endif]-->
+    <head>
+
+        {% stylesheets
+        'bundles/smexpress/stylesheets/jquery-ui-1.10.4.custom.min.css'
+        'bundles/smexpress/stylesheets/v03-site-fontface.css'
+        'bundles/smexpress/stylesheets/v03-site-generic.css'
+        'bundles/smexpress/stylesheets/v03-site-modules.css'
+        'bundles/smexpress/stylesheets/v03-site-modules-form.css'
+        'bundles/smexpress/stylesheets/owl.carousel.css'
+        'bundles/smexpress/stylesheets/owl.theme.css'
+        'bundles/smexpress/stylesheets/v03-site-colors-variables.css'
+        'bundles/smexpress/stylesheets/jscroll-pane.css'
+        'bundles/smexpress/stylesheets/style_smexpress.css'
+        filter='cssrewrite,?yui_css'
+        %}
+
+        <link rel="stylesheet" type="text/css" href="{{ asset_url }}"/>
+        {% endstylesheets %}
+
+        {% javascripts
+        '@SMExpressBundle/Resources/public/javascripts/jquery-1.9.1.min.js'
+        '@SMExpressBundle/Resources/public/javascripts/ui/jquery-ui-1.10.4.custom.min.js'
+        filter='?yui_js'
+        %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+
+        <script type="text/javascript">
+            <!--
+            var g = document.documentElement;g.className=g.className.replace(/\bnoJS\b/,"")+"hasJS";
+            //-->
+        </script>
+
+        <!--[if lt IE 9]>
+        {% javascripts
+        '@SMExpressBundle/Resources/public/javascripts/html5.js'
+        filter='?yui_js'
+        %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+        <![endif]-->
+
+        <script type="text/javascript">
+            if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
+                var msViewportStyle = document.createElement("style")
+                msViewportStyle.appendChild(
+                        document.createTextNode(
+                                "@-ms-viewport{width:auto!important}"
+                        )
+                )
+                document.getElementsByTagName("head")[0].appendChild(msViewportStyle)
+            }
+        </script>
+
+    </head>
+
+    {% if module_result.content_info.persistent_variable.bodyClass is defined %}
+        {% set body_class = module_result.content_info.persistent_variable.bodyClass %}
+    {% endif %}
+    <body {% if body_id is defined %}id="{{ body_id }}"{% endif %} {% if body_class is defined %} class="{{ body_class }}"{% endif %}>
+    <div id="v03site">
+            <div class="v03wrapper">
+            <section id="main" role="main">
+                {% block content %}
+                    {% block upperSection %}{% endblock %}
+
+                    {% block lowerSection %}
+                        {% if module_result is defined %}
+                            {# we are in a legacy rendered module #}
+                            {{ module_result.content|raw }}
+                        {% endif %}
+                        {% block right_column %}{% endblock %}
+                    {% endblock %}
+
+                {% endblock %}
+            </section>
+
+            {% block javascripts %}
+
+                {% javascripts
+                '@SMExpressBundle/Resources/public/javascripts/jquery-1.9.1.min.js'
+                '@SMExpressBundle/Resources/public/javascripts/ui/jquery-ui-1.10.4.custom.min.js'
+                '@SMExpressBundle/Resources/public/javascripts/ui/jquery.ui.dialog.min.js'
+                '@SMExpressBundle/Resources/public/javascripts/ui/jquery.ui.widget.js'
+                '@SMExpressBundle/Resources/public/javascripts/ui/jquery.ui.position.js'
+                '@SMExpressBundle/Resources/public/javascripts/ui/jquery.ui.menu.js'
+                '@SMExpressBundle/Resources/public/javascripts/ui/jquery.ui.autocomplete.js'
+                '@SMExpressBundle/Resources/public/javascripts/ui/jquery.ui.datepicker-fr.min.js'
+                '@SMExpressBundle/Resources/public/javascripts/bootstrap/bootstrap.min.js'
+                '@SMExpressBundle/Resources/public/javascripts/bootstrap/bootstrap-multiselect.js'
+                '@SMExpressBundle/Resources/public/javascripts/jquery.mousewheel.js'
+                '@SMExpressBundle/Resources/public/javascripts/jquery.jscrollpane.min.js'
+                '@SMExpressBundle/Resources/public/javascripts/jquery-ias.js'
+                '@SMExpressBundle/Resources/public/javascripts/owl.carousel.min.js'
+                '@SMExpressBundle/Resources/public/javascripts/jqueryPlaceholder.js'
+                '@SMExpressBundle/Resources/public/javascripts/jquery.tools.fr.min.js'
+                '@SMExpressBundle/Resources/public/javascripts/jquery.uniform.js'
+                '@SMExpressBundle/Resources/public/javascripts/jquery.jscrollpane.min.js'
+                '@SMExpressBundle/Resources/public/javascripts/jquery.mousewheel.js'
+                '@SMExpressBundle/Resources/public/javascripts/modernizr-2.6.2.js'
+                '@SMExpressBundle/Resources/public/javascripts/siteFrontMain.js'
+                '@SMExpressBundle/Resources/public/javascripts/siteFrontForms.js'
+                '@SMExpressBundle/Resources/public/javascripts/siteFrontMobile.js'
+                '@SMExpressBundle/Resources/public/javascripts/modernizr-2.6.2.js'
+                filter='?yui_js' %}
+                <script type="text/javascript" src="{{ asset_url }}"></script>
+                {% endjavascripts %}
+
+                <!--[if lte IE 9]>
+
+                {% javascripts
+                '@CGFrontBundle/Resources/public/javascripts/jquery.columnizer.min.js'
+                %}
+                <script type="text/javascript" src="{{ asset_url }}"></script>
+                {% endjavascripts %}
+                <script type="text/javascript">
+                    $(function () {
+                        $('.subNavList').columnize({
+                            columns: 3,
+                            buildOnce: true,
+                            doneFunc: function () {
+                                $('.subNavList .column').width("30%");
+                                $('.headingList').addClass("dontend");
+                            }
+                        })
+                    });
+                </script>
+                <![endif]-->
+
+
+            {% endblock javascripts %}
+        </div>
+    </div>
+
+    </body>
+    </html>
+{% endif %}
