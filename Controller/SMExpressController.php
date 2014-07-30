@@ -31,6 +31,4 @@ class SMExpressController extends BaseController{
 
     }
 
-
-
 }
