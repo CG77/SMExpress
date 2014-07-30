@@ -1,0 +1,152 @@
+
+/***************** colors for colorCheck form checkbox **/
+label.lbColor01:before {
+	border-color: #00CCFF;  /* Bleu */
+}
+label.lbColor01.iChecked:before {
+	background-color: #00CCFF;  /* Bleu */
+}
+label.lbColor02:before {
+	border-color: #FF0066;  /* Magenta */
+}
+label.lbColor02.iChecked:before {
+	background-color: #FF0066;  /* Magenta */
+}
+label.lbColor03:before {
+	border-color: #336699;  /* Bleu fonce */
+}
+label.lbColor03.iChecked:before  {
+	background-color: #336699;  /* Bleu fonce */
+}
+label.lbColor04:before {
+	border-color: #FF9900;  /* Orange */
+}
+label.lbColor04.iChecked:before  {
+	background-color: #FF9900;  /* Orange */
+}
+label.lbColor05:before {
+	border-color: #99CC00;  /* Vert */
+}
+label.lbColor05.iChecked:before  {
+	background-color: #99CC00;  /* Vert */
+}
+label.lbColor06:before {
+	border-color: #339900;  /* Vert fonce */
+}
+label.lbColor06.iChecked:before  {
+	background-color: #339900;  /* Vert fonce */
+}
+label.lbColor07:before {
+	border-color: #CC66FF;  /* Violet */
+}
+label.lbColor07.iChecked:before {
+	background-color: #CC66FF;  /* Violet */
+}
+label.lbColor08:before {
+	border-color: #330066;  /* Bleu violace */
+}
+label.lbColor08.iChecked:before  {
+	background-color: #330066;  /* Bleu violace */
+}
+label.lbColor09:before {
+	border-color: #990000;  /* Rouge fonce */
+}
+label.lbColor09.iChecked:before  {
+	background-color: #990000;  /* Rouge fonce */
+}
+label.lbColor10:before {
+	border-color: #FF6600;  /* Rouge orange */
+}
+label.lbColor10.iChecked:before  {
+	background-color: #FF6600;  /* Rouge orange */
+}
+label.lbColor11:before {
+	border-color: #CC33FF;  /* Violet fonce */
+}
+label.lbColor11.iChecked:before  {
+	background-color: #CC33FF;  /* Violet fonce */
+}
+label.lbColor12:before {
+	border-color: #CCCC33;  /* Jaune vert */
+}
+label.lbColor12.iChecked:before  {
+	background-color: #CCCC33;  /* Jaune vert */
+}
+
+/***************** colors for btnGeoMarker **************/
+.lbColor01 .btnGeoMarker {
+	background-color: #00CCFF;  /* Bleu */
+}
+.lbColor02 .btnGeoMarker {
+	background-color: #FF0066;  /* Magenta */
+}
+.lbColor03 .btnGeoMarker {
+	background-color: #336699;  /* Bleu fonce */
+}
+.lbColor04 .btnGeoMarker {
+	background-color: #FF9900;  /* Orange */
+}
+.lbColor05 .btnGeoMarker {
+	background-color: #99CC00;  /* Vert */
+}
+.lbColor06 .btnGeoMarker {
+	background-color: #339900;  /* Vert fonce */
+}
+.lbColor07 .btnGeoMarker {
+	background-color: #CC66FF;  /* Violet */
+}
+.lbColor08 .btnGeoMarker {
+	background-color: #330066;  /* Bleu violace */
+}
+.lbColor09 .btnGeoMarker {
+	background-color: #990000;  /* Rouge fonce */
+}
+.lbColor10 .btnGeoMarker {
+	background-color: #FF6600;  /* Rouge orange */
+}
+.lbColor11 .btnGeoMarker {
+	background-color: #CC33FF;  /* Violet fonce */
+}
+.lbColor12 .btnGeoMarker {
+	background-color: #CCCC33;  /* Jaune vert */
+}
+
+/***************** colors for resultsList ***************/
+.lbColor01 .metaNote span {
+	color: #00CCFF;  /* Bleu */
+}
+.lbColor02 .metaNote span {
+	color: #FF0066;  /* Magenta */
+}
+.lbColor03 .metaNote span {
+	color: #336699;  /* Bleu fonce */
+}
+.lbColor04 .metaNote span {
+	color: #FF9900;  /* Orange */
+}
+.lbColor05 .metaNote span {
+	color: #99CC00;  /* Vert */
+}
+.lbColor06 .metaNote span {
+	color: #339900;  /* Vert fonce */
+}
+.lbColor07 .metaNote span {
+	color: #CC66FF;  /* Violet */
+}
+.lbColor08 .metaNote span {
+	color: #330066;  /* Bleu violace */
+}
+.lbColor09 .metaNote span {
+	color: #990000;  /* Rouge fonce */
+}
+.lbColor10 .metaNote span {
+	color: #FF6600;  /* Rouge orange */
+}
+.lbColor11 .metaNote span {
+	color: #CC33FF;  /* Violet fonce */
+}
+.lbColor12 .metaNote span {
+	color: #CCCC33;  /* Jaune vert */
+}
+
+
